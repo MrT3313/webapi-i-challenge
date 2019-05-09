@@ -3,7 +3,7 @@ const knexConfig = require('../knexfile.js');
 const db = knex(knexConfig.development);
 
 
-// -- EXPORTS -- //
+// -- EXPORTS / PUBLISH METHODS-- //
 module.exports = {
   find,
   findById,
