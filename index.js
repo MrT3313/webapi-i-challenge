@@ -31,15 +31,36 @@ const server = express();
                 .catch(err => {
                     // console.log(err)
                 })
-            // res.send('/api/users get()')
-            // res.json(users)
-            
+        })
+        server.get('/api/users/:id', (req,res) => {
+            console.log('/api/users/:id get()')
+            console.log(db)
+
+// THIS IS A CARD CODED VALUE
+/// change to pull klj
+            const userID = req.params.id
+
+            db.findById(userID)
+                .then(db => {
+                    res.json(db)
+                })
+                .catch(err => {
+                    // console.log(err)
+                })
+
         })
     // - POST - 
         server.post('/api/users', (req, res) => {
             console.log('/api/users post()')
             // console.log(req, res)
 
+            // req.body()
+
+            db.insert()
+                .then()
+                .catch(err => {
+                    // console.log(err)
+                })
         })
     
 
