@@ -8,6 +8,7 @@ const db = require('./data/db')
 
 // CALL EXPRESS
 const server = express();
+server.use(express.json())
 
 // ROUTING
     // - GET -
@@ -15,13 +16,11 @@ const server = express();
             console.log('/ get()')
             // console.log(req, res)
             res.send('Why hello - welcome to my struggles :) -- Happy Servering')
-            
-            
         });
         server.get('/api/users', (req,res) => {
             console.log('/awpi/users get()')
-            console.log('THIS IS THE REQ',req)
-            console.log('THIS IS THE RES',res)
+            // console.log('THIS IS THE REQ',req)
+            // console.log('THIS IS THE RES',res)
             
             db.find()
                 .then(db => {
@@ -29,15 +28,15 @@ const server = express();
                     res.json(db)
                 })
                 .catch(err => {
-                    // console.log(err)
+                    res
+                        .status(500)
+                        .json({ error: "The users information could not be retrieved" });
                 })
         })
         server.get('/api/users/:id', (req,res) => {
             console.log('/api/users/:id get()')
             console.log(db)
 
-// THIS IS A CARD CODED VALUE
-/// change to pull klj
             const userID = req.params.id
 
             db.findById(userID)
@@ -50,18 +49,28 @@ const server = express();
 
         })
     // - POST - 
-        server.post('/api/users', (req, res) => {
-            console.log('/api/users post()')
-            // console.log(req, res)
+    server.post("/api/users", (req, res) => {
+        
+        // console.log('THIS IS THE REQ', req)
+        const newUser = req.body;
+        console.log('THIS IS THE NEW USER', newUser);
 
-            // req.body()
-
-            db.insert()
-                .then()
-                .catch(err => {
-                    // console.log(err)
-                })
-        })
+        if (newUser.name && newUser.bio) {
+            db.insert(newUser)
+            .then(addedUser => {
+                res.status(201).json(addedUser);
+            })
+            .catch(err => {
+                res.status(500).json({
+                    error: "There was an error while saving the user to the database"
+                });
+            });
+        } else {
+            res
+            .status(400)
+            .json({ errorMessage: "Please provide name and bio for the user." });
+        }
+    });
     
 
 
