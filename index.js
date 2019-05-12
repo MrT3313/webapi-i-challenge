@@ -18,14 +18,14 @@ server.use(express.json())
             res.send('Why hello - welcome to my struggles :) -- Happy Servering')
         });
         server.get('/api/users', (req,res) => {
-            console.log('/awpi/users get()')
+            console.log('/api/users get()')
             // console.log('THIS IS THE REQ',req)
             // console.log('THIS IS THE RES',res)
             
             db.find()
-                .then(db => {
+                .then(users => {
                     // console.log(res)
-                    res.json(db)
+                    res.send(users)
                 })
                 .catch(err => {
                     res
@@ -40,11 +40,19 @@ server.use(express.json())
             const userID = req.params.id
 
             db.findById(userID)
-                .then(db => {
-                    res.json(db)
-                })
+            .then(user => {
+                if( user ) {
+                    res.json(user)
+                } else {
+                    res.status(404).json({
+                        message: "the user with the specified ID does not exist"
+                    })
+                }
+            })
                 .catch(err => {
-                    // console.log(err)
+                    res
+                        .status(500)
+                        .json({ error: "The users information could not be retrieved" });
                 })
 
         })
@@ -118,12 +126,6 @@ server.use(express.json())
             })
     })
     
-
-
-
-
-
-
 
 
 // LISTENING 
