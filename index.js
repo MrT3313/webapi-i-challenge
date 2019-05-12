@@ -71,6 +71,35 @@ server.use(express.json())
             .json({ errorMessage: "Please provide name and bio for the user." });
         }
     });
+
+    // - PUT
+    server.put('/api/users/:id', (req,res) => {
+        const { id } = req.params;
+            console.log(id)
+
+        console.log('REQ.BODY',req.body)
+        const updatedUser = req.body;
+            console.log('UPDATED USER', updatedUser)
+
+        if (updatedUser.name && updatedUser.bio) {
+            console.log('INSIDE IF STATEMENT')
+            db.update(id, updatedUser)
+                .then(user => {
+                    if( user ) {
+                        res.json(user)
+                    } else {
+                        res.status(404).json({
+                            message: "the user with the specified ID does not exist"
+                        })
+                    }
+                })
+                .catch( err => {
+                    res
+                        .status(500)
+                        .json({ error: "The user info could not be modified"})
+                })
+        }
+    })
     
 
 
