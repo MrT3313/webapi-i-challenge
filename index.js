@@ -100,6 +100,23 @@ server.use(express.json())
                 })
         }
     })
+
+    // - DELETE
+    server.delete('/api/users/:id', (req,res) => {
+        const { id } = req.params;
+        db.remove(id)
+            .then( removedUser => {
+                if (removedUser) {
+                    res.json(removedUser)
+                } else {
+                    res .status(404)
+                    .json({message: "the user with specified ID does not exist"})
+                }
+            })
+            .catch(err => {
+                res.statusCode(500).json({err: "The user could not be removed"})
+            })
+    })
     
 
 
